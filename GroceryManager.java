@@ -1,56 +1,49 @@
 import java.util.Scanner;
 
 /**
- * GroceryManager is a simple grocery inventory management system
- * that uses parallel arrays to track item names, prices, and stock levels.
+ * This program is a grocery management system.
+ * It uses parallel arrays to store item names, prices, and stock.
+ * The user can view inventory, restock items, or exit.
  *
- * <p>This program allows users to view the current inventory,
- * restock existing items, and exit via a text-based menu.</p>
- *
- * @author Your Team Names Here
+ * @author Connor Burger
  * @version 1.0
- * @since 2025
  */
 public class GroceryManager {
 
     /**
-     * Prints the current inventory to the console.
+     * Prints all items in the inventory.
+     * Skips any empty slots in the array.
      *
-     * @param names  the array of item names
-     * @param prices the array of item prices corresponding to each name
-     * @param stocks the array of stock quantities corresponding to each name
+     * @param names the item names array
+     * @param prices the item prices array
+     * @param stocks the item stock array
      */
     public static void printInventory(String[] names, double[] prices, int[] stocks) {
-        System.out.println("\n===== Current Inventory =====");
-        boolean hasItems = false;
+        System.out.println("\n--- Inventory ---");
 
         for (int i = 0; i < names.length; i++) {
             if (names[i] != null) {
-                System.out.printf("%-15s | Price: $%.2f | Stock: %d%n",
-                        names[i], prices[i], stocks[i]);
-                hasItems = true;
+                System.out.println("Item: " + names[i] + " | Price: $" + prices[i] + " | Stock: " + stocks[i]);
             }
         }
 
-        if (!hasItems) {
-            System.out.println("Inventory is empty.");
-        }
-        System.out.println("=============================\n");
+        System.out.println();
     }
 
     /**
-     * Restocks an existing item in the inventory by name.
+     * Finds an item by name and adds stock to it.
+     * Prints a message if the item is not found.
      *
-     * @param names  the array of item names
-     * @param stocks the array of stock quantities corresponding to each name
+     * @param names the item names array
+     * @param stocks the item stock array
      * @param target the name of the item to restock
-     * @param amount the quantity to add to the item's current stock
+     * @param amount how much stock to add
      */
     public static void restockItem(String[] names, int[] stocks, String target, int amount) {
         for (int i = 0; i < names.length; i++) {
-            if (names[i] != null && names[i].equalsIgnoreCase(target)) {
-                stocks[i] += amount;
-                System.out.println("Restocked \"" + names[i] + "\". New stock: " + stocks[i]);
+            if (names[i] != null && names[i].equals(target)) {
+                stocks[i] = stocks[i] + amount;
+                System.out.println(target + " restocked! New stock: " + stocks[i]);
                 return;
             }
         }
@@ -58,47 +51,63 @@ public class GroceryManager {
     }
 
     /**
-     * The main entry point of the GroceryManager application.
+     * Main method that runs the menu loop.
+     * Uses a Scanner to get user input.
      *
-     * @param args command-line arguments (not used)
+     * @param args command line arguments
      */
     public static void main(String[] args) {
         String[] itemNames = new String[10];
         double[] itemPrices = new double[10];
         int[] itemStocks = new int[10];
 
-        itemNames[0] = "Apples";   itemPrices[0] = 1.99;  itemStocks[0] = 50;
-        itemNames[1] = "Bread";    itemPrices[1] = 2.49;  itemStocks[1] = 30;
-        itemNames[2] = "Milk";     itemPrices[2] = 3.29;  itemStocks[2] = 20;
-        itemNames[3] = "Eggs";     itemPrices[3] = 4.99;  itemStocks[3] = 15;
-        itemNames[4] = "Cheese";   itemPrices[4] = 5.49;  itemStocks[4] = 10;
+        // add some starting items
+        itemNames[0] = "Apples";
+        itemPrices[0] = 1.99;
+        itemStocks[0] = 50;
+
+        itemNames[1] = "Bread";
+        itemPrices[1] = 2.49;
+        itemStocks[1] = 30;
+
+        itemNames[2] = "Milk";
+        itemPrices[2] = 3.29;
+        itemStocks[2] = 20;
+
+        itemNames[3] = "Eggs";
+        itemPrices[3] = 4.99;
+        itemStocks[3] = 15;
+
+        itemNames[4] = "Cheese";
+        itemPrices[4] = 5.49;
+        itemStocks[4] = 10;
 
         Scanner scanner = new Scanner(System.in);
+        int choice;
 
         while (true) {
-            System.out.println("===== Grocery Manager Menu =====");
             System.out.println("1. View Inventory");
             System.out.println("2. Restock Item");
             System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.print("Enter choice: ");
 
-            int choice = scanner.nextInt();
+            choice = scanner.nextInt();
             scanner.nextLine();
 
             if (choice == 1) {
                 printInventory(itemNames, itemPrices, itemStocks);
             } else if (choice == 2) {
-                System.out.print("Enter item name to restock: ");
-                String target = scanner.nextLine();
+                System.out.print("Enter item name: ");
+                String name = scanner.nextLine();
                 System.out.print("Enter amount to add: ");
                 int amount = scanner.nextInt();
                 scanner.nextLine();
-                restockItem(itemNames, itemStocks, target, amount);
+                restockItem(itemNames, itemStocks, name, amount);
             } else if (choice == 3) {
-                System.out.println("Exiting Grocery Manager. Goodbye!");
+                System.out.println("Goodbye!");
                 break;
             } else {
-                System.out.println("Invalid choice. Please enter 1, 2, or 3.");
+                System.out.println("Invalid option, try again.");
             }
         }
 
